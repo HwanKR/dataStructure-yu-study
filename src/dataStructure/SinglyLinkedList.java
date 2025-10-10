@@ -99,19 +99,64 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
 
 	@Override
 	public void add(int i, E e) throws IndexOutOfBoundsException {
-		// TODO Auto-generated method stub
-		
+		if (i <= 0) addFirst(e);
+		else if (i >= size) addLast(e);
+		else {
+			Node<E> prev = node(i-1);
+			Node<E> newNode = new Node<>(e, prev.next);
+			prev.next = newNode;
+			size++;
+		}
 	}
 
 	@Override
 	public boolean remove(int i) throws IndexOutOfBoundsException {
-		// TODO Auto-generated method stub
-		return false;
+		checkIndex(i, size);
+		if (i == 0) {
+			first = first.next;
+			if (first == null) last = null;
+		} else {
+			Node<E> prev = node(i-1);
+			Node<E> deleted = prev.next;
+			prev.next = deleted.next;
+			if (last == deleted) last = prev;
+		}
+		size--;		
+		return true;
 	}
 
 	@Override
 	public boolean remove(E e) {
-		// TODO Auto-generated method stub
+		if (isEmpty()) return false;
+		
+		if (first.item.equals(e)) {
+			remove(0);
+			return true;		
+		} else {
+			Node<E> prev;
+			for (prev=first; prev.next!=null; prev=prev.next) {
+				if (prev.next.item.equals(e)) {
+					Node<E> deleted = prev.next;
+					prev.next = deleted.next;
+					if (last == deleted) last = prev;
+					size--;
+					return true;
+				}
+			}
+		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[ ");
+		for (Node<E> ptr=first; ptr != null; ptr = ptr.next) {
+			sb.append(ptr.item + " ");
+		}
+		sb.append("]");
+		return sb.toString();
+	}
+	
+	
 }

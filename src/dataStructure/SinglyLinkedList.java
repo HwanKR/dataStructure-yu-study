@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
+	@SuppressWarnings("hiding")
 	protected class Node<E> {
 		E item;
 		Node<E> next;
@@ -20,95 +21,97 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
 	public int size() {
 		return size;
 	}
-	
+
 	public boolean isEmpty() {
 		return size == 0;
 	}
-	
+
 	public E get(int i) throws IndexOutOfBoundsException {
 		checkIndex(i, size);
 		Node<E> x = node(i);
 		return x.item;
 	}
-	
-	protected void checkIndex(int i, int n) throws IndexOutOfBoundsException {
-		if (i<0 || i>=n) {
-			throw new IndexOutOfBoundsException();
-		}
-	}
-	
-	protected Node<E> node(int i) throws IndexOutOfBoundsException {
-		Node<E> ptr = first;
-		for (int k=0; k<i; k++) {
-			ptr = ptr.next;
-		}
-		return ptr;
-	}
-	
+
 	public E set(int i, E newValue) throws IndexOutOfBoundsException {
 		checkIndex(i, size);
 		Node<E> x = node(i);
-		E oldValue = x.item;
+		E oldVlaue = x.item;
 		x.item = newValue;
-		return oldValue;
+		return oldVlaue;
 	}
-	
+
 	public void addFirst(E e) {
 		Node<E> newNode = new Node<>(e, first);
 		first = newNode;
-		if (last == null) last = newNode;
+		if (last == null)
+			last = newNode;
 		size++;
 	}
 	
 	public void addLast(E e) {
 		Node<E> newNode = new Node<>(e, null);
-		if (first == null) first = newNode;
-		else last.next = newNode;
+		if (last == null)
+			first = newNode;
+		else
+			last.next = newNode;
 		last = newNode;
 		size++;
 	}
-	
-	public void add(int i, E e) throws IndexOutOfBoundsException {
-		checkIndex(i, size+1);
-		if (i == 0) addFirst(e);
-		else if (i == size-1) addLast(e);
-		else {
-			Node<E> x = node(i-1);
-			Node<E> newNode = new Node<>(e, x.next);
-			x.next = newNode;
-			size++;
-		}
+
+	protected Node<E> node(int i) throws IndexOutOfBoundsException {
+		Node<E> ptr = first;
+		for (int k = 0; k < i; k++)
+			ptr = ptr.next;
+		return ptr;
 	}
 	
-	public boolean remove(int i) throws IndexOutOfBoundsException {
-		return true;
+	protected void checkIndex(int i, int n) throws IndexOutOfBoundsException {
+		if (i < 0 || i >= n)
+			throw new IndexOutOfBoundsException("Illegal index: " + i);
 	}
 	
-	public boolean remove(E e) {
-		return false;
-	}
-	
-	@SuppressWarnings("unchecked")
 	public Iterator<E> iterator() {
-		return (Iterator<E>) new SinglyLinkedList<E>();
+		return new SinglyLinkedListIterator();
 	}
 	
-	@SuppressWarnings("unused")
 	private class SinglyLinkedListIterator implements Iterator<E> {
-		private Node<E> lastReturned, nextNode;
-		private int nextIndex;
-		
-		@SuppressWarnings("unused")
-		public SinglyLinkedListIterator() {nextNode = first;}
-		
-		public boolean hasNext() {return nextIndex < size;}
-		
+		private Node<E> lastReturned;
+        private Node<E> nextNode;
+        private int nextIndex;
+        
+        public SinglyLinkedListIterator() {
+        	nextNode = first;
+        }
+        
+		public boolean hasNext() {
+			return nextIndex < size;
+		}
+
 		public E next() {
-			if (!hasNext()) throw new NoSuchElementException();
+			if (!hasNext())
+				throw new NoSuchElementException();
 			lastReturned = nextNode;
 			nextNode = nextNode.next;
 			nextIndex++;
 			return lastReturned.item;
 		}
+	}
+
+	@Override
+	public void add(int i, E e) throws IndexOutOfBoundsException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean remove(int i) throws IndexOutOfBoundsException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(E e) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

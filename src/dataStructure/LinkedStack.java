@@ -3,6 +3,10 @@ package dataStructure;
 public class LinkedStack<E> implements Stack<E> {
 	SinglyLinkedList<E> list = new SinglyLinkedList<>();
 	
+	public LinkedStack() {
+		list = new SinglyLinkedList<>();
+	}
+	
 	public int size() {
 		return list.size();
 	}
@@ -34,4 +38,11 @@ public class LinkedStack<E> implements Stack<E> {
 		list.remove(0); // O(1) 보장을 위해 remove(0) 사용. remove(item)은 최대 O(n)의 복잡도를 가짐.
 		return item;
 	}
+
+	@Override
+	public String toString() {
+		return "LinkedStack: " + list + ", top = " + top(); 
+	}
+	
+	
 }

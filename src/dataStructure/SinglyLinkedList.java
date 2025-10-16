@@ -58,6 +58,20 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
 		size++;
 	}
 
+	public void invert() {
+		Node<E> lead = first, middle, tail;
+		
+		middle = null;
+		while(lead != null) {
+			tail = middle;
+			middle = lead;
+			lead = lead.next;
+			middle.next = tail;
+		}
+		last = first;
+		first = middle;
+	}
+	
 	protected Node<E> node(int i) throws IndexOutOfBoundsException {
 		Node<E> ptr = first;
 		for (int k = 0; k < i; k++)

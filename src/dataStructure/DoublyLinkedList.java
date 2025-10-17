@@ -21,7 +21,10 @@ public class DoublyLinkedList<E> {
 		newnode.next = node.next;
 		node.next.prev = newnode;
 		node.next = newnode;
-		
 	}
 	
+	void ddelete(Node<E> deleted) {
+		deleted.prev.next = deleted.next;
+		deleted.next.prev = deleted.prev;
+	}
 }

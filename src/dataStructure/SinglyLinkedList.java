@@ -72,6 +72,15 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
 		first = middle;
 	}
 	
+	public void concatenate(SinglyLinkedList<E> other) {
+		if (this.size() == 0) {
+			this.first = other.first;
+			this.last = other.last;
+			return;
+		}
+		this.last.next = other.first;
+	}
+	
 	protected Node<E> node(int i) throws IndexOutOfBoundsException {
 		Node<E> ptr = first;
 		for (int k = 0; k < i; k++)

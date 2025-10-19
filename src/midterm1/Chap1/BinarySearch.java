@@ -1,4 +1,4 @@
-package midterm1;
+package midterm1.Chap1;
 
 public class BinarySearch {
 	private int compare(int x, int y) {

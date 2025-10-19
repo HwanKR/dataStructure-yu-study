@@ -16,4 +16,20 @@ public class BinarySearch {
 		}
 		return -1;
 	}
+	
+	public int bsearch2(int[] A, int key) {
+		return bsearchR(A, key, 0, A.length-1);
+	}
+	
+	private int bsearchR(int[] A, int key, int left, int right) {
+		if (left <= right) {
+			int middle = (left + right)/2;
+			switch(compare(A[middle], key)) {
+			case -1: return bsearchR(A, key, middle+1, right);
+			case 1: return bsearchR(A, key, left, middle-1);
+			case 0: return middle;
+			}
+		}
+		return -1;
+	}
 }

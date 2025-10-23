@@ -2,7 +2,7 @@ package midtermEx;
 
 import java.util.Scanner;
 
-public class TestDriver1 {
+public class TestDriver {
 
     public static void main(String[] args) {
         int[] arr;
@@ -30,17 +30,17 @@ public class TestDriver1 {
     }
     
     public static void selectionSort(int[] arr) {
-    	for (int i=0; i <arr.length-1; i++) {
+    	for (int i=0; i < arr.length-1; i++) {
     		int min = i;
-    		for (int k=i+1; k < arr.length; k++) {
+    		for (int k=0; k < arr.length; k++) {
     			if (arr[k] < arr[min]) {
     				min = k;
-    			}
+    			}    			
     		}
     		int temp = arr[i];
     		arr[i] = arr[min];
     		arr[min] = temp;
-    		printArr(arr);
     	}
+    	printArr(arr);
     }
 }

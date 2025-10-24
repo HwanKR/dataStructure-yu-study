@@ -35,6 +35,7 @@ public class TestDriver3 {
 
     static Node invert(Node start) {
     	Node lead = start, middle = null, tail;
+    	
     	while (lead != null) {
     		tail = middle;
     		middle = lead;
@@ -72,12 +73,12 @@ public class TestDriver3 {
     	
     	if (a != null) {
     		tail.next = a;
-    	} else {
+    	}  else {
     		tail.next = b;
     	}
     	
     	return head;
-    } 
+    }
 
     // C의 main() 흐름과 동일하게 구성
     public static void main(String[] args) {

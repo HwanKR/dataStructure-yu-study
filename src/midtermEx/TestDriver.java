@@ -1,103 +1,126 @@
 package midtermEx;
-
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class TestDriver {
 
-    // C의 struct node와 동일한 최소 정의
-    static class Node {
-        int data;
-        Node next;
-        Node(int d, Node n) { data = d; next = n; }
-    }
-
-    // C의 make_list()와 동일: 앞에 붙이기(push-front), -1이면 종료
-    static Node makeList(Scanner sc) {
-        System.out.print("연결 리스트에 추가할 수를 입력(마지막은 -1): ");
-        Node start = null;
-        while (true) {
-            int x = sc.nextInt();
-            if (x == -1) break;
-            start = new Node(x, start); // 앞에 붙임(입력 순서가 역순이 됨)
-        }
-        return start;
-    }
-
-    // C의 print_list() 느낌 유지. 주소 하위바이트는 identityHashCode로 흉내
-    static void printList(String msg, Node start) {
-        System.out.print(msg + " [ ");
-        for (Node p = start; p != null; p = p.next) {
-            int lowByte = System.identityHashCode(p) & 0xff;
-            System.out.printf("%2d(%02x) ", p.data, lowByte);
-        }
-        System.out.println("]");
-    }
-
-    static Node invert(Node start) {
-    	Node lead = start, middle = null, tail;
-    	while (lead != null) {
-    		tail = middle;
-    		middle = lead;
-    		lead = lead.next;
-    		middle.next = lead;
-    	}
-    	return middle;
+    // 1. C의 struct/enum 대신 inner class 사용
+    
+    // (row, col, dir) 저장용 (Chap3.pdf의 Items)
+    private static class Items {
+        int row, col, dir;
+        Items(int r, int c, int d) { row=r; col=c; dir=d; }
     }
     
-    static Node sortMerge(Node a, Node b) {
-    	if (a == null) return b;
-    	if (b == null) return a;
-    	
-    	Node head, tail;
-    	
-    	if (a.data <= b.data) {
-    		head = tail = new Node(a.data, null);
-    		a = a.next;
-    	} else {
-    		head = tail = new Node(b.data, null);
-    		b = b.next;
-    	}
-    	
-    	while (a != null && b != null) {
-    		if (a.data <= b.data) {
-    			tail.next = new Node(a.data, null);
-    			tail = tail.next;
-    			a = a.next;
-    		} else {
-    			tail.next = new Node(b.data, null);
-    			tail = tail.next;
-    			b = b.next;
-    		}
-    	}
-    	
-    	if (a != null) {
-    		tail.next = a;
-    	} else {
-    		tail.next = b;
-    	}
-    	
-    	return head;
-    } 
-
-    // C의 main() 흐름과 동일하게 구성
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        Node A = makeList(sc);
-        Node B = makeList(sc);
-        printList("A =", A);
-        printList("B =", B);
-
-        // 문제 1
-        A = invert(A);
-        B = invert(B);
-        printList("invert() 후의 A =", A);
-        printList("invert() 후의 B =", B);
-
-        // 문제 2
-        Node C = sortMerge(A, B);
-        printList("sort_merge(A, B)의 결과 =", C);
-
+    // 8방향 좌표 (Chap3.pdf의 move)
+    private static class Move {
+        int r, c;
+        Move(int r, int c) { this.r = r; this.c = c; }
+    }
+    
+    // 2. 필드 (지도, 방문기록, 나침반)
+    private int[][] maze;
+    private int[][] mark;
+    private Move[] move;
+    
+    // 3. (핵심) 파일 로드 및 "경계벽" 구현
+    private void loadMaze(String fileName) throws FileNotFoundException {
+        Scanner sc = new Scanner(new File(fileName));
+        
+        int M = sc.nextInt(); // 6
+        int N = sc.nextInt(); // 8
+        
+        // [핵심 트릭 1] 경계벽(padding)을 위해 (M+2) x (N+2) 크기
+        maze = new int[M+2][N+2];
+        mark = new int[M+2][N+2];
+        
+        // 1. 테두리 전체를 '1'(벽)로 채우기
+        for (int i = 0; i < M+2; i++) {
+            maze[i][0] = 1;      // 왼쪽 벽
+            maze[i][N+1] = 1;    // 오른쪽 벽
+        }
+        for (int j = 0; j < N+2; j++) {
+            maze[0][j] = 1;      // 윗쪽 벽
+            maze[M+1][j] = 1;    // 아랫쪽 벽
+        }
+        
+        // 2. 안쪽(1,1 부터 M,N 까지)을 파일 데이터로 채우기
+        for (int i = 1; i <= M; i++) {
+            for (int j = 1; j <= N; j++) {
+                maze[i][j] = sc.nextInt();
+            }
+        }
+        
         sc.close();
+        
+        // 3. move 배열 초기화 (Chap3.pdf)
+        move = new Move[8];
+        move[0] = new Move(-1, 0); // 북
+        move[1] = new Move(-1, 1); // 북동
+        move[2] = new Move(0, 1);  // 동
+        move[3] = new Move(1, 1);  // 남동
+        move[4] = new Move(1, 0);  // 남
+        move[5] = new Move(1, -1); // 남서
+        move[6] = new Move(0, -1); // 서
+        move[7] = new Move(-1, -1);// 북서
+    }
+
+    // 4. (핵심) 경로 탐색 알고리즘
+    public void findPath(String fileName, int exitRow, int exitCol) {
+        
+        // 1. 파일 로드
+        try {
+            loadMaze(fileName);
+        } catch (FileNotFoundException e) {
+            System.out.println("파일을 찾을 수 없습니다.");
+            return;
+        }
+
+        // 2. 스택 직접 구현 (ArrayStack 클래스 X)
+        Items[] stack = new Items[maze.length * maze[0].length];
+        int top = -1;
+        
+        // 3. 시작점 (1, 1) 방문 표시 및 push
+        mark[1][1] = 1;
+        stack[++top] = new Items(1, 1, 0); // (1,1)에서 0(북) 방향부터 시작
+
+        // 4. 백트래킹 루프 (Chap3.pdf 로직)
+        while (top != -1) { // 스택이 비어있지 않은 동안
+            Items pos = stack[top--]; // [POP]
+            
+            while (pos.dir <= 7) { // 8방향 탐색
+                int r = pos.row + move[pos.dir].r;
+                int c = pos.col + move[pos.dir].c;
+                
+                // [성공] 출구 도달
+                if (r == exitRow && c == exitCol) {
+                    System.out.println("경로를 찾았습니다:");
+                    // 스택에 쌓인 경로 출력
+                    for (int i = 0; i <= top; i++) {
+                        System.out.println("(" + stack[i].row + ", " + stack[i].col + ")");
+                    }
+                    System.out.println("(" + r + ", " + c + ")"); // 마지막 위치
+                    return;
+                }
+                
+                // [전진] 길이(0)고 방문 안 했(0)으면
+                if (maze[r][c] == 0 && mark[r][c] == 0) {
+                    mark[r][c] = 1; // 방문 표시
+                    
+                    // [PUSH 1] 현재 위치+다음방향 (백트래킹용)
+                    pos.dir++;
+                    stack[++top] = pos; 
+                    
+                    // 새 위치로 전진
+                    pos = new Items(r, c, 0); // (r,c)에서 0(북) 방향부터 다시 시작
+                } else {
+                    // [다음 방향] 벽이거나 방문했으면
+                    pos.dir++;
+                }
+            } // (8방향 탐색 끝)
+        } // (백트래킹 루프 끝)
+        
+        System.out.println("경로를 찾을 수 없습니다.");
     }
 }

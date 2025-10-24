@@ -52,6 +52,7 @@ public class Maze {
 		sc.close();
 		
 		move = new Move[8];
+		move[0] = new Move
 	}
     
 }

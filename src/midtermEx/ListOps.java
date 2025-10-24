@@ -125,49 +125,37 @@ public class ListOps {
      * (Chap4.pdf 다항식 덧셈 로직 응용, 'new Node' 없이)
      */
     private Node sortMerge(Node a, Node b) {
-        // TODO: (완성됨) - 'new Node' 없는 '재연결(Re-wiring)' 버전
-
-        // 1. A나 B 둘 중 하나가 비어있으면, 다른 하나를 반환
         if (a == null) return b;
         if (b == null) return a;
-
-        Node cHead = null; // 결과 리스트(C)의 헤드
-        Node cLast = null; // 결과 리스트(C)의 마지막 노드 (추가용 포인터)
-
-        // 2. [초기화] cHead와 cLast를 (a, b 중) 더 작은 노드로 설정
-        if (a.data <= b.data) { // (같을 때 a를 먼저 넣어 안정성(stable) 보장)
-            cHead = a;
-            cLast = a;
-            a = a.next; // a는 다음 노드로 이동
+        
+        Node head, tail;
+        
+        if (a.data <= b.data) {
+        	head = tail = a;
+        	a = a.next;
         } else {
-            cHead = b;
-            cLast = b;
-            b = b.next; // b는 다음 노드로 이동
+        	head = tail = b;
+        	b = b.next;
         }
-
-        // 3. [병합] a와 b 둘 다 노드가 남아있는 동안 반복
+        
         while (a != null && b != null) {
-            if (a.data <= b.data) {
-                // a가 더 작거나 같음: a 노드를 cLast의 뒤에 엮음
-                cLast.next = a; // [핵심] new Node 아님
-                cLast = a;      // cLast를 방금 붙인 a로 이동
-                a = a.next;     // a는 다음 노드로 이동
-            } else {
-                // b가 더 작음: b 노드를 cLast의 뒤에 엮음
-                cLast.next = b; // [핵심] new Node 아님
-                cLast = b;      // cLast를 방금 붙인 b로 이동
-                b = b.next;     // b는 다음 노드로 이동
-            }
+        	if (a.data <= b.data) {
+        		tail.next = a;
+        		tail = a;
+        		a = a.next;
+        	} else {
+        		tail.next = b;
+        		tail = b;
+        		b = b.next;
+        	}
         }
-
-        // 4. [마무리] 둘 중 하나가 끝났으면, 남은 리스트를 cLast 뒤에 통째로 붙임
-        if (a == null) {
-            cLast.next = b;
-        } else { // b == null
-            cLast.next = a;
+        
+        if (a != null) {
+        	tail.next = a;
+        } else {
+        	tail.next = b;
         }
-
-        // 5. 결과 리스트의 헤드 반환
-        return cHead;
+        
+        return head;
     }
 }

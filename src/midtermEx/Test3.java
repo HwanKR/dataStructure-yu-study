@@ -16,6 +16,6 @@ public class Test3 {
         algorithm.loadLists(fileName);
 
         // 3. C의 main 로직 수행
-//        algorithm.runOperations();
+        algorithm.runOperations();
     }
 }

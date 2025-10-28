@@ -19,6 +19,25 @@ public class TreeNode<E> implements Position<E> {
 		return element;
 	}
 	
+	public TreeNode<E> getLeft() {
+		return left;
+	}
+	public TreeNode<E> getRight() {
+		return right;
+	}
+	
+	public void setElement(E element) {
+		this.element = element;
+	}
+	public void setLeft(TreeNode<E> left) {
+		this.left = left;
+	}
+	public void setRight(TreeNode<E> right) {
+		this.right = right;
+	}
+	
+	
+	
 	public String toString() {
 		return "노드(" + element + ")";
 	}

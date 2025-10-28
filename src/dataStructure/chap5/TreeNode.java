@@ -37,7 +37,6 @@ public class TreeNode<E> implements Position<E> {
 	}
 	
 	
-	
 	public String toString() {
 		return "노드(" + element + ")";
 	}

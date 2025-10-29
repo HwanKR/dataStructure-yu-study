@@ -1,5 +1,8 @@
 package dataStructure.chap5;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LinkedBinaryTree<E> {
 	protected TreeNode<E> root = null;
 	protected int size = 0;
@@ -12,7 +15,7 @@ public class LinkedBinaryTree<E> {
 	}
 	
 	public int size() {
-		return this.size();
+		return this.size;
 	}
 	public boolean isEmpty() {
 		return size == 0;
@@ -68,5 +71,48 @@ public class LinkedBinaryTree<E> {
 		E oldValue = node.getElement();
 		node.setElement(newValue);
 		return oldValue;
+	}
+	
+	// 여기서부터 9주 3차시 이진 트리 순회 내용
+	public Iterable<Position<E>> inorder() {
+		List<Position<E>> result = new ArrayList<Position<E>>();
+		inorderSubtree(root(), result);
+		return result;
+	}
+	
+	private void inorderSubtree(Position<E> p, List<Position<E>> result) {
+		if (p != null) {
+			inorderSubtree(left(p), result);
+			result.add(p);
+			inorderSubtree(right(p), result);
+		}
+	}
+	
+	public Iterable<Position<E>> preorder() {
+		List<Position<E>> result = new ArrayList<Position<E>>();
+		preorderSubtree(root(), result);
+		return result;
+	}
+	
+	private void preorderSubtree(Position<E> p, List<Position<E>> result) {
+		if (p != null) {
+			result.add(p);
+			preorderSubtree(left(p), result);
+			preorderSubtree(right(p), result);
+		}
+	}
+	
+	public Iterable<Position<E>> postorder() {
+		List<Position<E>> result = new ArrayList<Position<E>>();
+		postorderSubtree(root(), result);
+		return result;
+	}
+	
+	private void postorderSubtree(Position<E> p, List<Position<E>> result) {
+		if (p != null) {
+			postorderSubtree(left(p), result);
+			postorderSubtree(right(p), result);
+			result.add(p);
+		}
 	}
 }

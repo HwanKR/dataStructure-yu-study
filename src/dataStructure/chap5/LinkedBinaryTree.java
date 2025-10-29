@@ -115,4 +115,38 @@ public class LinkedBinaryTree<E> {
 			result.add(p);
 		}
 	}
+	
+	public Iterable<Position<E>> iterativeInorder() {
+		List<Position<E>> result = new ArrayList<Position<E>>();
+		LinkedStack<Position<E>> stack = new LinkedStack<>();
+		
+		Position<E> p = root();
+		while (true) {
+			while (p != null) {
+				stack.push(p);
+				p = left(p);
+			}
+			if (stack.isEmpty()) break;
+			p = stack.pop();
+			result.add(p);
+			p = right(p);
+		}
+		return result;
+	}
+	
+	public Iterable<Position<E>> levelOrder() {
+		List<Position<E>> result = new ArrayList<Position<E>>();
+		LinkedQueue<Position<E>> queue = new LinkedQueue<>();
+		
+		if (isEmpty()) return result;
+		queue.enqueue(root());
+		while (true) {
+			if (queue.isEmpty()) break;
+			Position<E> p = queue.dequeue();
+			result.add(p);
+			if (left(p) != null) queue.enqueue(left(p));
+			if (right(p) != null) queue.enqueue(right(p));
+		}
+		return result;
+	}
 }

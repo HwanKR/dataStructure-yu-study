@@ -179,4 +179,18 @@ public class LinkedBinaryTree<E> {
 			&& equal(first.getLeft(), second.getLeft())
 			&& equal(first.getRight(), second.getRight())));
 	}
+	
+	public int leafCount() {
+		return leafCount(root);
+	}
+	
+	private int leafCount(TreeNode<E> node) {
+		if (node != null) {
+			if (node.getLeft() == null && node.getRight() == null)
+				return 1;
+			else 
+				return leafCount(node.getLeft()) + leafCount(node.getRight());
+		}
+		return 0;
+	}
 }

@@ -167,4 +167,16 @@ public class LinkedBinaryTree<E> {
 		}
 		return null;
 	}
+	
+	public boolean equalTo(LinkedBinaryTree<E> other) {
+		return equal(root, other.root);
+	}
+	
+	private boolean equal(TreeNode<E> first, TreeNode<E> second) {
+		return ((first == null && second == null) 
+			|| (first != null && second != null
+			&& first.getElement().equals(second.getElement())
+			&& equal(first.getLeft(), second.getLeft())
+			&& equal(first.getRight(), second.getRight())));
+	}
 }

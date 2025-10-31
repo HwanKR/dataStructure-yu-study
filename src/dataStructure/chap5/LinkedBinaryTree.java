@@ -149,4 +149,22 @@ public class LinkedBinaryTree<E> {
 		}
 		return result;
 	}
+	
+	public LinkedBinaryTree<E> copy() {
+		LinkedBinaryTree<E> dup = new LinkedBinaryTree<>();
+		if (root() != null)
+			dup.root = copy(root);
+		
+		return dup;
+	}
+	
+	private TreeNode<E> copy(TreeNode<E> original) {
+		if (original != null) {
+			TreeNode<E> temp = new TreeNode<E>(original.getElement());
+			temp.setLeft(copy(original.getLeft()));
+			temp.setRight(copy(original.getRight()));
+			return temp;
+		}
+		return null;
+	}
 }

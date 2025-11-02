@@ -193,4 +193,16 @@ public class LinkedBinaryTree<E> {
 		}
 		return 0;
 	}
+	
+	// 이진 트리의 높이 계산
+	public int height() {
+		return height(root);
+	}
+	
+	private int height(TreeNode<E> node) {
+		if (node == null) 
+			return 0;
+		else
+			return Math.max(height(node.getLeft()), height(node.getRight())) + 1;
+	}
 }

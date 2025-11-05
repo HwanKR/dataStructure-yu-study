@@ -3,11 +3,11 @@ package dataStructure.chap5;
 import java.util.ArrayList;
 
 public class ThreadedTreeNode<E> implements Position<E> {
-	private E element;
-	private boolean lthread;
-	private boolean rthread;
-	private ThreadedTreeNode<E> left;
-	private ThreadedTreeNode<E> right;
+	E element;
+	boolean lthread;
+	boolean rthread;
+	ThreadedTreeNode<E> left;
+	ThreadedTreeNode<E> right;
 	
 	public ThreadedTreeNode(E element) {
 		this.element = element;
@@ -59,14 +59,5 @@ public class ThreadedTreeNode<E> implements Position<E> {
     }
     public void setLThread(boolean lthread) {
         this.lthread = lthread;
-    }
-    
-    // 한 노드의 inorder successor 발견
-    private ThreadedTreeNode<E> insucc(ThreadedTreeNode<E> p) {
-    	ThreadedTreeNode<E> temp = p.getRight();
-    	if (p.rthread == false)
-    		while (temp.lthread == false)
-    			temp = temp.getLeft();
-    	return temp;
     }
 }

@@ -48,7 +48,6 @@ public class ThreadedBinaryTree<E> {
     		ThreadedTreeNode<E> temp = insucc(child);
     		temp.left = child;
     	}
-    	
     }
     
 }

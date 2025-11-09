@@ -10,14 +10,14 @@ public class HW4 {
         int digit;
         Node next;
 
-        Node(int d) {
-            this.digit = d;
+        Node(int digit) {
+            this.digit = digit;
             this.next = null;
         }
     }
 
     public static void main(String[] args) {
-        Scanner fileScanner = null;
+    	Scanner fileScanner = null;
         try {
             Scanner keyboardScanner = new Scanner(System.in);
             System.out.print("파일 이름? ");
@@ -48,7 +48,7 @@ public class HW4 {
             
         } catch (FileNotFoundException e) {
             System.out.println("파일을 찾을 수 없습니다: " + e.getMessage());
-        } finally {
+        } finally {	
             if (fileScanner != null) {
                 fileScanner.close();
             }
@@ -193,7 +193,7 @@ public class HW4 {
         return newHead;
     }
 
-    private static boolean isZero(Node h) {
-    	return h == null || (h.digit == 0 && h.next == null);
+    private static boolean isZero(Node head) {
+    	return head == null || (head.digit == 0 && head.next == null);
     }
 }

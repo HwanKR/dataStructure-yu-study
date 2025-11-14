@@ -1,4 +1,4 @@
-package dataStructure.practice;
+package dataStructure.lesson.chap5;
 
 import java.util.ArrayList;
 

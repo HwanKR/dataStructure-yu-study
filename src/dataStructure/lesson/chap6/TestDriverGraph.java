@@ -2,7 +2,10 @@ package dataStructure.lesson.chap6;
 
 public class TestDriverGraph {
 	public static void main(String[] args) {
-		Graph G = new MatrixGraph(7, false);
+		
+//		Graph G = new MatrixGraph(7, false); // MatrixGraph 테스트 드라이버
+		Graph G = new ListGraph(7, false);
+		
 		G.addEdge(0, 1);
 		G.addEdge(0, 2);
 		G.addEdge(1, 3);
@@ -17,7 +20,8 @@ public class TestDriverGraph {
 		System.out.println("\n0의 in-degree = " + G.inDegree(0));
 		System.out.println("0의 out-degree = " + G.outDegree(0));
 
-		G = new MatrixGraph(6, true);
+//		G = new MatrixGraph(6, true); // MatrixGraph 테스트 드라이버
+		G = new ListGraph(7, true);
 		G.addEdge(1, 0);
 		G.addEdge(1, 3);
 		G.addEdge(2, 1);
